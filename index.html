@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cámaras Psych Engine → Funky Maker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@500;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f4ff;--bg2:#e6f6ff;--card:#fff;--fg:#1b1838;--mut:#6a678a;--bd:#e0dcf5;--in:#f3f1ff;--v:#7c5cff;--c:#0aa3c4;--p:#ff4f9a;--a:#ffb020;--g:#1fbf8a;--sh:0 6px 24px rgba(80,60,200,.13);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#110f1e;--bg2:#0b1a27;--card:#1b1930;--fg:#f0eeff;--mut:#a29fc6;--bd:#2f2b52;--in:#141226;--v:#9b82ff;--c:#38d3f0;--p:#ff6fb0;--a:#ffc24d;--g:#3ddba8;--sh:0 8px 28px rgba(0,0,0,.5)}}
+:root[data-theme="dark"]{--bg:#110f1e;--bg2:#0b1a27;--card:#1b1930;--fg:#f0eeff;--mut:#a29fc6;--bd:#2f2b52;--in:#141226;--v:#9b82ff;--c:#38d3f0;--p:#ff6fb0;--a:#ffc24d;--g:#3ddba8;--sh:0 8px 28px rgba(0,0,0,.5)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background-color:var(--bg);background-image:linear-gradient(180deg,var(--bg),var(--bg2));background-attachment:fixed;color:var(--fg);font:500 15px/1.5 Nunito,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:660px;margin:0 auto;padding:16px 16px 40px}
+.hero{background:linear-gradient(135deg,#6d4aff,#c13bd4 55%,#ff4f9a);border-radius:22px;padding:22px 20px;color:#fff;box-shadow:var(--sh)}
+.bdg{display:inline-block;background:rgba(255,255,255,.22);padding:4px 11px;border-radius:99px;font-weight:800;font-size:12px;letter-spacing:.04em}
+h1{font:400 34px/1.05 "Lilita One",Trebuchet MS,system-ui,sans-serif;margin:10px 0 8px;letter-spacing:.01em}
+h1 em{font-style:normal;color:#fff3a8}
+.hero p{margin:0;color:rgba(255,255,255,.93);font-size:14px}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:16px;margin:16px 0;box-shadow:var(--sh)}
+.h{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+h2{font:400 20px/1.1 "Lilita One",Trebuchet MS,system-ui,sans-serif;margin:0;letter-spacing:.01em}
+.n{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;flex:none;font:400 17px "Lilita One",system-ui,sans-serif;color:#fff;background:var(--v)}
+.n.b{background:var(--c)}.n.p{background:var(--p)}.n.g{background:var(--g);color:#06281f}
+.m{color:var(--mut);font-size:13px}
+.dz{--k:var(--v);display:flex;align-items:center;gap:13px;padding:14px;border:2px dashed var(--k);border-radius:16px;background:var(--in);cursor:pointer;transition:transform .12s,background .15s,border-color .15s;position:relative;-webkit-tap-highlight-color:transparent}
+.dz.k2{--k:var(--c)}
+.dz:active{transform:scale(.985)}
+.dz:focus-within{outline:3px solid var(--k);outline-offset:3px}
+.dz.drag{background:var(--card);border-style:solid;transform:scale(1.015)}
+.dz.on{--k:var(--g);border-style:solid}
+.dz.bad{--k:var(--p);border-style:solid}
+.ic{width:48px;height:48px;border-radius:14px;background:var(--k);color:#fff;display:grid;place-items:center;flex:none;box-shadow:0 4px 12px rgba(0,0,0,.18)}
+.dz.on .ic{color:#06281f}
+.i-ok{display:none}.dz.on .i-ok{display:block}.dz.on .i-up{display:none}
+.t{min-width:0}
+.t b{display:block;font-weight:800;font-size:15px;overflow-wrap:anywhere}
+.t small{display:block;color:var(--mut);font-size:12.5px;line-height:1.35;margin-top:1px}
+.fi{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:2;font-size:0;margin:0}
+.err{background:#ffe3e8;color:#8a0c2a;border:1px solid #ff8aa5;border-radius:14px;padding:11px 14px;margin:12px 0;font-weight:700;font-size:13px;overflow-wrap:anywhere}
+.st{color:var(--mut);font-size:13px;margin:9px 2px 0;min-height:1em;overflow-wrap:anywhere}
+.sec{display:flex;align-items:center;gap:10px;font:400 13px "Lilita One",system-ui,sans-serif;text-transform:uppercase;letter-spacing:.1em;color:var(--p);margin:20px 0 2px}
+.sec::after{content:"";flex:1;height:2px;border-radius:2px;background:var(--bd)}
+.sec:first-of-type{margin-top:4px}
+label{display:block;font-weight:800;font-size:13px;color:var(--mut);margin:12px 0 5px}
+label.r{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--fg);font-weight:700;margin:14px 0 4px;cursor:pointer}
+input:not([type=checkbox]):not([type=file]),select{width:100%;box-sizing:border-box;padding:11px 12px;border:1.5px solid var(--bd);border-radius:12px;background:var(--in);color:var(--fg);font:700 15px/1.25 Nunito,system-ui,sans-serif;transition:border-color .15s,box-shadow .15s}
+input:focus,select:focus{outline:0;border-color:var(--v);box-shadow:0 0 0 3px rgba(124,92,255,.28)}
+select{-webkit-appearance:none;appearance:none;padding-right:36px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238a86b8' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+input[type=checkbox]{-webkit-appearance:none;appearance:none;width:48px;height:28px;border-radius:99px;background:var(--bd);position:relative;flex:none;margin:0;cursor:pointer;transition:background .2s}
+input[type=checkbox]::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.35);transition:left .2s}
+input[type=checkbox]:checked{background:var(--g)}
+input[type=checkbox]:checked::after{left:23px}
+input[type=checkbox]:focus-visible{outline:3px solid var(--v);outline-offset:2px}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{width:100%;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .12s,filter .15s,opacity .15s}
+button:active:not(:disabled){transform:translateY(2px) scale(.99)}
+#go{margin-top:20px;padding:15px;border-radius:16px;background:linear-gradient(135deg,var(--v),var(--p));color:#fff;font:400 21px "Lilita One",system-ui,sans-serif;letter-spacing:.03em;box-shadow:0 8px 22px rgba(124,92,255,.42)}
+#go:disabled{opacity:.38;box-shadow:none;cursor:not-allowed}
+#dn{margin-top:14px;padding:14px;border-radius:16px;background:linear-gradient(135deg,var(--g),var(--c));color:#04251f;font:400 18px "Lilita One",system-ui,sans-serif;letter-spacing:.02em;box-shadow:0 8px 20px rgba(31,191,138,.35)}
+#out{font:500 13px/1.65 "JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;background:var(--in);border:1px solid var(--bd);border-radius:14px;padding:13px;overflow-x:auto}
+.ok{color:var(--g);font-weight:800}.wr{color:#e08a00}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .wr{color:var(--a)}}
+:root[data-theme="dark"] .wr{color:var(--a)}
+.foot{text-align:center;color:var(--mut);font-size:12px;margin-top:22px}
+[hidden]{display:none!important}
+.hb{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:12px;z-index:30;width:44px;height:44px;border-radius:50%;padding:0;background:var(--card);color:var(--v);border:2.5px solid var(--v);font:400 25px/1 "Lilita One",Trebuchet MS,system-ui,sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.28);display:grid;place-items:center}
+.ov{position:fixed;top:0;left:0;right:0;bottom:0;z-index:40;background:rgba(10,8,25,.62);display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--card);color:var(--fg);width:100%;max-width:660px;max-height:90%;overflow:auto;border-radius:24px 24px 0 0;padding:16px 16px calc(22px + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 40px rgba(0,0,0,.4);overscroll-behavior:contain}
+@media (min-width:700px){.ov{align-items:center}.sheet{border-radius:24px;max-height:86%}}
+.sh{display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:-16px;margin:-16px -16px 8px;padding:14px 16px;background:var(--card);z-index:1}
+.x{width:40px;height:40px;border-radius:50%;background:var(--in);color:var(--fg);font:700 17px/1 system-ui,sans-serif;padding:0;flex:none}
+.ac{border:1px solid var(--bd);border-radius:16px;background:var(--in);margin:10px 0;overflow:hidden}
+.ac summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:13px 14px;font:400 17px/1.15 "Lilita One",Trebuchet MS,system-ui,sans-serif}
+.ac summary::-webkit-details-marker{display:none}
+.ac summary::after{content:"";margin-left:auto;width:9px;height:9px;border-right:3px solid var(--mut);border-bottom:3px solid var(--mut);transform:rotate(45deg);margin-top:-4px;transition:transform .2s;flex:none}
+.ac[open] summary::after{transform:rotate(-135deg);margin-top:4px}
+.ac .n{width:26px;height:26px;font-size:14px}
+.n.a{background:var(--a);color:#2a1c00}
+.bd{padding:0 14px 14px;font-size:14px;line-height:1.55}
+.bd p{margin:8px 0}.bd ul{margin:6px 0;padding-left:20px}.bd li{margin:6px 0}
+code{font:500 12.5px "JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:1px 5px;overflow-wrap:anywhere}
+.pri{margin-top:14px;padding:13px;border-radius:14px;background:linear-gradient(135deg,var(--v),var(--p));color:#fff;font:400 18px "Lilita One",system-ui,sans-serif;letter-spacing:.02em}
+</style></head><body><main>
+<div class="err" id="err" hidden></div>
+<header class="hero"><span class="bdg">Psych Engine → Funky Maker</span><h1>Conversor de <em>cámaras</em></h1>
+<p>Carga el chart de Psych y tu nivel de Funky Maker. Borro las cámaras y eventos de cámara anteriores, creo las necesarias y escribo los movimientos en la línea de tiempo.</p></header>
+
+<section class="c"><div class="h"><span class="n">1</span><h2>Chart de Psych Engine</h2></div>
+<label class="dz"><span class="ic"><svg class="i-up" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg><svg class="i-ok" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>
+<span class="t"><b id="fpn">Elegir archivo .json</b><small>Toca o arrastra aquí · opcional: también su events.json</small></span>
+<input class="fi" type="file" id="fp" multiple></label>
+<div class="st" id="ip"></div></section>
+
+<section class="c"><div class="h"><span class="n b">2</span><h2>Nivel de Funky Maker</h2></div>
+<label class="dz k2"><span class="ic"><svg class="i-up" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg><svg class="i-ok" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>
+<span class="t"><b id="ffn">Elegir archivo .FNMM</b><small>Toca o arrastra aquí tu nivel</small></span>
+<input class="fi" type="file" id="ff"></label>
+<div class="st" id="if"></div></section>
+
+<section class="c"><div class="h"><span class="n p">3</span><h2>Opciones</h2></div>
+<div class="sec">Método y fuente</div>
+<label for="how">Cómo crear los movimientos</label>
+<select id="how" autocomplete="off"><option value="ev" selected>Eventos directos en la línea de tiempo (recomendado)</option><option value="pk">Action packs (método anterior)</option></select>
+<label for="src">Fuente de la cámara</label>
+<select id="src"><option value="auto">Automática (eventos “Camera Movement” si existen, si no secciones)</option><option value="ev">Solo eventos “Camera Movement”</option><option value="sec">Solo secciones (mustHitSection)</option><option value="both">Ambas (los eventos pisan a las secciones)</option></select>
+
+<div class="sec">Posiciones de cámara</div>
+<label for="o0">Cámara del oponente</label><select id="o0"></select>
+<div class="g"><div><label for="x0">Desfase X</label><input id="x0" type="number" value="0"></div><div><label for="y0">Desfase Y</label><input id="y0" type="number" value="0"></div></div>
+<label for="o1">Cámara de Boyfriend</label><select id="o1"></select>
+<div class="g"><div><label for="x1">Desfase X</label><input id="x1" type="number" value="0"></div><div><label for="y1">Desfase Y</label><input id="y1" type="number" value="0"></div></div>
+
+<div class="sec">Zoom y tiempos</div>
+<label class="r"><input type="checkbox" id="uz" checked><span>Usar “Set Default Cam Zoom” (crea una cámara por zoom)</span></label>
+<label for="zr">Zoom de Psych que equivale a escala 1.0</label><input id="zr" type="number" step="0.01" value="1">
+<div class="g"><div><label for="tr">Transición máx. (s)</label><input id="tr" type="number" step="0.1" value="0.7"></div><div><label for="dl">Desfase de tiempo (s)</label><input id="dl" type="number" step="0.01" value="0"></div></div>
+<div class="g"><div><label for="ez">Easing</label><select id="ez"><option value="default">Default</option><option value="linear">Linear</option><option value="cubic">Cubic</option><option value="expo">Exponential</option><option value="back">Back</option><option value="elastic">Elastic</option><option value="bounce">Bounce</option><option value="circ">Circ</option><option value="slow">Slow</option></select></div><div><label for="rd">Redondear escala a</label><select id="rd"><option value="0.01">0.01 (más cámaras)</option><option value="0.05" selected>0.05</option><option value="0.1">0.1 (menos cámaras)</option></select></div></div>
+
+<div class="sec">Limpieza</div>
+<label class="r"><input type="checkbox" id="dz"><span>Borrar también los eventos CameraZoom existentes</span></label>
+
+<button id="go" disabled>Convertir</button>
+</section>
+
+<section class="c" id="res" hidden><div class="h"><span class="n g">✓</span><h2>Resultado</h2></div>
+<div id="out"></div><button id="dn">Descargar nivel convertido</button><div class="m" id="dm" style="margin-top:8px"></div></section>
+<div class="foot">Hecho para portar mods de Psych Engine a Funky Maker</div>
+<button class="hb" id="hbtn" type="button" aria-label="Ayuda" aria-haspopup="dialog">?</button>
+<div class="ov" id="help" hidden role="dialog" aria-modal="true" aria-labelledby="ht"><div class="sheet">
+<div class="sh"><h2 id="ht">Cómo usar esta página</h2><button class="x" id="hx" type="button" aria-label="Cerrar">✕</button></div>
+<p class="m" style="margin:0 0 2px">Toca cada sección para abrirla.</p>
+
+<details class="ac" open><summary><span class="n">★</span>Qué necesitas</summary><div class="bd">
+<p>Dos archivos:</p>
+<ul><li>El <b>chart de Psych Engine</b> de la canción (<code>.json</code>).</li><li>Tu <b>nivel de Funky Maker</b> (<code>.FNMM</code>).</li></ul>
+<p>La página crea las cámaras que hacen falta, borra las anteriores y escribe los movimientos de cámara en la línea de tiempo del nivel, en el segundo que marca Psych.</p>
+</div></details>
+
+<details class="ac"><summary><span class="n">1</span>Chart de Psych Engine</summary><div class="bd">
+<p><b>Dónde está:</b> dentro de la carpeta del mod, en <code>mods/NOMBRE_DEL_MOD/data/CANCIÓN/</code>.</p>
+<p>El nombre lleva la dificultad: <code>carmaland.json</code> (normal), <code>carmaland-easy.json</code>, <code>carmaland-hard.json</code>. Ejemplo de este mod: <code>CarmalandPort/data/carmaland/carmaland-hard.json</code>.</p>
+<ul><li>Si el mod viene en <code>.rar</code> o <code>.zip</code>, extráelo primero.</li><li>Si en esa carpeta también hay un <code>events.json</code>, puedes elegir los dos a la vez (mantén pulsado para seleccionar varios).</li><li>Elige la dificultad que usaste para armar tu nivel.</li></ul>
+<p>La página lee los eventos de cámara (<code>Camera Movement</code> o <code>Carma Camera</code> con <code>dad</code>/<code>bf</code>) y los de zoom (<code>Set Default Cam Zoom</code>). Si no hay eventos de cámara, usa las secciones (<code>mustHitSection</code>).</p>
+</div></details>
+
+<details class="ac"><summary><span class="n b">2</span>Nivel de Funky Maker</summary><div class="bd">
+<p><b>Dónde está:</b> es el archivo <code>.FNMM</code> que se crea al exportar el nivel. En Funky Maker: <b>CREAR</b> → tu proyecto → <b>PASO 4: PROBAR y EXPORTAR</b>. Búscalo con el explorador de archivos de tu teléfono.</p>
+<ul><li>Guarda una copia del original antes de convertir, por si quieres volver atrás.</li><li>Tus otros eventos (objetos, opacidad, vida, zoom hecho a mano) no se borran.</li></ul>
+</div></details>
+
+<details class="ac"><summary><span class="n p">3</span>Opciones</summary><div class="bd"><ul>
+<li><b>Cómo crear los movimientos:</b> <i>Eventos directos</i> (recomendado) escribe cada cámara como evento “Establecer Cámara” en la línea de tiempo. Si ya había un evento en ese segundo, lo suma a sus acciones sin borrarlo. <i>Action packs</i> es el método anterior.</li>
+<li><b>Fuente de la cámara:</b> de dónde sale el momento de cada cambio. “Automática” elige sola.</li>
+<li><b>Cámara del oponente / de Boyfriend:</b> de dónde copiar la posición: de tus cámaras actuales (0 y 1 por defecto) o de un objeto de la escena. <b>Desfase X/Y</b> corre la cámara si queda movida.</li>
+<li><b>Usar “Set Default Cam Zoom”:</b> crea una cámara por cada zoom distinto. <b>Zoom que equivale a 1.0</b> es el zoom de Psych que será escala 1 (en Carmaland, 4.5). <b>Redondear escala</b> junta zooms parecidos para tener menos cámaras.</li>
+<li><b>Transición máx.:</b> segundos que dura cada movimiento. Si el siguiente cambio llega antes, se acorta solo para llegar a tiempo. <b>Easing</b> es el tipo de movimiento.</li>
+<li><b>Desfase de tiempo:</b> adelanta o atrasa todos los movimientos (en segundos).</li>
+<li><b>Borrar CameraZoom:</b> borra tus eventos CameraZoom. Déjalo apagado si los hiciste a mano.</li></ul>
+</div></details>
+
+<details class="ac"><summary><span class="n g">4</span>Convertir y descargar</summary><div class="bd">
+<p>Toca <b>Convertir</b> y revisa el resumen: cámaras antes y ahora, eventos creados y avisos. Luego toca <b>Descargar nivel convertido</b>.</p>
+<ul><li>En el enlace publicado el archivo baja como <code>.zip</code>: <b>renómbralo a <code>.FNMM</code></b> antes de importarlo.</li><li>Si guardas esta página como archivo <code>.html</code> y la abres en tu navegador, baja directamente como <code>.FNMM</code>.</li></ul>
+</div></details>
+
+<details class="ac"><summary><span class="n a">↓</span>Importar en Funky Maker</summary><div class="bd">
+<ul><li>Abre la lista de niveles (la misma donde aparece <b>&lt;&lt; NUEVO PROYECTO &gt;&gt;</b>, en <b>CREAR</b>).</li><li>Toca <b>&lt;&lt; IMPORTAR &gt;&gt;</b> y elige el <code>.FNMM</code> convertido.</li><li>Abre el nivel y pruébalo. Si sale el aviso de nivel corrupto, usa el reparador de Funky Maker; si falta memoria, usa el optimizador.</li></ul>
+</div></details>
+
+<details class="ac"><summary><span class="n p">!</span>Si algo se ve raro</summary><div class="bd"><ul>
+<li><b>La cámara queda corrida:</b> ajusta Desfase X/Y o elige otra cámara u objeto como posición.</li>
+<li><b>Zoom muy cerca o muy lejos:</b> cambia “Zoom que equivale a 1.0”.</li>
+<li><b>Salen demasiadas cámaras:</b> redondea la escala a 0.1 o apaga el zoom.</li>
+<li><b>Se corta o va muy lento:</b> cambia la Transición máx.</li>
+<li><b>No carga un archivo:</b> debajo del botón aparece el motivo (o un aviso rojo arriba). Mándame ese texto y lo reviso.</li>
+<li><b>No cambia nada:</b> revisa en el resumen cuántos eventos se crearon y que el chart sea el de la dificultad correcta.</li></ul>
+</div></details>
+<button class="pri" id="hok" type="button">Entendido</button>
+</div></div>
+</main>
+<script>
+// <core>
+function fmt(v){if(typeof v==='number')return Number.isInteger(v)?v.toFixed(1):String(v);if(v===null||typeof v!=='object')return JSON.stringify(v);if(Array.isArray(v))return '['+v.map(fmt).join(',')+']';return '{'+Object.keys(v).map(k=>JSON.stringify(k)+':'+fmt(v[k])).join(',')+'}';}
+function psychEvents(P){const S=P.song||P;return (S.events||[]).flatMap(([t,l])=>l.map(e=>({t:+t,n:e[0],a:e[1],b:e[2]})));}
+const isGameZoom=e=>e.n==='Set Default Cam Zoom'&&!/cam(hud|other)/i.test(String(e.a)+','+String(e.b||''));
+function convert(P,scene,ev,o){
+  const S=P.song||P,all=psychEvents(P),warn=[];
+  const cm=all.filter(e=>e.n==='Camera Movement'||e.n==='Carma Camera');
+  const useSec=o.src==='sec'||o.src==='both'||(o.src==='auto'&&!cm.length);
+  const useEv=o.src==='ev'||o.src==='both'||(o.src==='auto'&&cm.length>0);
+  const items=[];
+  if(useSec){let t=0,bpm=+S.bpm||100,gf=0;for(const s of S.notes||[]){if(s.changeBPM&&+s.bpm)bpm=+s.bpm;items.push({t,k:'T',v:s.mustHitSection?1:0,r:0});if(s.gfSection)gf++;t+=(+s.sectionBeats||4)*60000/bpm;}
+    if(gf)warn.push(gf+' secciones de GF: se usó mustHitSection.');}
+  if(useEv)for(const e of cm){const v=String(e.a).trim().toLowerCase(),tv=(v==='0'||v==='dad')?0:(v==='1'||v==='bf'||v==='boyfriend')?1:-1;if(tv>=0)items.push({t:e.t,k:'T',v:tv,r:1});else warn.push('Camera Movement “'+e.a+'” ignorado ('+Math.round(e.t)+' ms).');}
+  if(o.zoom)for(const e of all)if(isGameZoom(e)){const z=parseFloat(e.a);if(z>0)items.push({t:e.t,k:'Z',v:z,r:1});}
+  const fp=all.filter(e=>e.n==='Camera Follow Pos').length;
+  if(fp)warn.push(fp+' eventos “Camera Follow Pos” no se convierten (posición absoluta de Psych).');
+  items.sort((x,y)=>x.t-y.t||x.r-y.r);
+  let tg=null,z=null,last=null;const seq=[];
+  const sc=()=>z==null?1:+(Math.round(z/o.zref/o.rd)*o.rd).toFixed(3);
+  for(const it of items){if(it.k==='T')tg=it.v;else z=it.v;if(tg==null)continue;
+    const key=tg+'|'+(o.zoom?sc():1);if(key===last)continue;last=key;
+    const p=seq[seq.length-1];if(p&&Math.abs(p.t-it.t)<0.5)p.key=key;else seq.push({t:it.t,key});}
+  const keys=[...new Set(seq.map(s=>s.key))];
+  const oc=JSON.parse(JSON.stringify(scene.cameras||[]));const pos=v=>{const [k,i]=String(v).split(':');const r=k==='c'?oc[i]&&oc[i].position:scene.objects[i]&&scene.objects[i].transform&&scene.objects[i].transform[0].position;return r||{x:0,y:0};};
+  const oldCams=oc.length;
+  scene.cameras=keys.map(k=>{const [t,s]=k.split('|');const b=pos(t==='0'?o.o0:o.o1),d=t==='0'?o.d0:o.d1;
+    return {position:{x:b.x+d[0],y:b.y+d[1]},scale:+s};});
+  const isCam=p=>(p.actions||[]).some(a=>a.type==='CameraSet');
+  const map=[],kept=[];
+  (ev.action_packs||[]).forEach((p,i)=>{if(isCam(p))map[i]=-1;else{map[i]=kept.length;kept.push(p);}});
+  const fix=a=>{if(a.type==='RunActionPack'){const m=map[a.props.actionPack];if(m===-1)return false;if(m!==undefined)a.props.actionPack=m;}return true;};
+  kept.forEach(p=>{p.actions=p.actions.filter(fix);});
+  let rm=0;const evl=[];
+  for(const e of ev.events||[]){const n=e.actions.length;
+    e.actions=e.actions.filter(a=>fix(a)&&a.type!=='CameraSet'&&!(o.delz&&a.type==='CameraZoom'));
+    rm+=n-e.actions.length;if(e.actions.length)evl.push(e);}
+  const pk=new Map();let short=0;
+  const add=[];seq.forEach((s,i)=>{const gap=i<seq.length-1?(seq[i+1].t-s.t)/1000:o.tr;const d=+Math.max(0.05,Math.min(o.tr,gap*0.85)).toFixed(3);if(d<o.tr)short++;const cs={type:'CameraSet',props:{transitionTimeUnit:'seconds',easingType:o.ez,mode:'focus',target:keys.indexOf(s.key),transitionTime:d}};let act=cs;if(o.how==='pk'){const pkey=s.key+'|'+d;if(!pk.has(pkey)){pk.set(pkey,kept.length);kept.push({actions:[cs]});}act={type:'RunActionPack',props:{actionPack:pk.get(pkey)}};}add.push({act,time:Math.max(0,s.t/1000+o.dl)});});
+  if(!kept.length)kept.push({actions:[]});
+  let merged=0;for(const a of add){const ex=evl.find(e=>Math.abs(e.time-a.time)<0.002);if(ex){ex.actions.unshift(a.act);merged++;}else evl.push({actions:[a.act],time:a.time});}
+  ev.action_packs=kept;ev.events=evl.sort((a,b)=>a.time-b.time);
+  return {cams:keys.length,oldCams,evs:seq.length,short,merged,rm,warn,list:scene.cameras.map((c,i)=>'#'+i+' '+(keys[i][0]==='0'?'oponente':'Boyfriend')+' · escala '+c.scale+' · ('+Math.round(c.position.x)+', '+Math.round(c.position.y)+')')};
+}
+function crc32(u){let t=crc32.t;if(!t){t=crc32.t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0;}}let c=0xFFFFFFFF;for(let i=0;i<u.length;i++)c=t[(c^u[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0;}
+const LB=[3,4,5,6,7,8,9,10,11,13,15,17,19,23,27,31,35,43,51,59,67,83,99,115,131,163,195,227,258],LE=[0,0,0,0,0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,0],
+DB=[1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,257,385,513,769,1025,1537,2049,3073,4097,6145,8193,12289,16385,24577],DE=[0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13],
+CO=[16,17,18,0,8,7,9,6,10,5,11,4,12,3,13,2,14,1,15];
+function huff(l,n){const count=new Uint16Array(16),sym=new Uint16Array(n),off=new Uint16Array(16);for(let i=0;i<n;i++)count[l[i]]++;count[0]=0;for(let i=1;i<16;i++)off[i]=off[i-1]+count[i-1];for(let i=0;i<n;i++)if(l[i])sym[off[l[i]]++]=i;return {count,sym};}
+function inflate(src,size){
+  const o=new Uint8Array(size);let pos=0,bb=0,bc=0,op=0;
+  const bits=n=>{while(bc<n){bb|=src[pos++]<<bc;bc+=8;}const v=bb&((1<<n)-1);bb>>>=n;bc-=n;return v;};
+  const dec=h=>{let code=0,first=0,idx=0;for(let len=1;len<16;len++){code|=bits(1);const c=h.count[len];if(code-c<first)return h.sym[idx+(code-first)];idx+=c;first+=c;first<<=1;code<<=1;}throw new Error('zip: código inválido');};
+  let fl=null,fd=null,last;
+  do{last=bits(1);const t=bits(2);
+    if(t===0){bb=0;bc=0;const len=src[pos]|(src[pos+1]<<8);pos+=4;for(let i=0;i<len;i++)o[op++]=src[pos++];}
+    else if(t===3)throw new Error('zip: bloque inválido');
+    else{let lh,dh;
+      if(t===1){if(!fl){const l=new Uint8Array(288);for(let i=0;i<288;i++)l[i]=i<144?8:i<256?9:i<280?7:8;fl=huff(l,288);fd=huff(new Uint8Array(30).fill(5),30);}lh=fl;dh=fd;}
+      else{const hl=bits(5)+257,hd=bits(5)+1,hc=bits(4)+4,cl=new Uint8Array(19);for(let i=0;i<hc;i++)cl[CO[i]]=bits(3);const ch=huff(cl,19),ls=new Uint8Array(hl+hd);let i=0;
+        while(i<hl+hd){const s=dec(ch);if(s<16)ls[i++]=s;else{let rep,val=0;if(s===16){val=ls[i-1];rep=3+bits(2);}else if(s===17)rep=3+bits(3);else rep=11+bits(7);while(rep--)ls[i++]=val;}}
+        lh=huff(ls.subarray(0,hl),hl);dh=huff(ls.subarray(hl),hd);}
+      for(;;){let s=dec(lh);if(s<256)o[op++]=s;else if(s===256)break;else{s-=257;const len=LB[s]+bits(LE[s]),ds=dec(dh),d=DB[ds]+bits(DE[ds]);for(let i=0;i<len;i++){o[op]=o[op-d];op++;}}}}
+  }while(!last);
+  return o;
+}
+function readZip(buf){
+  const dv=new DataView(buf.buffer,buf.byteOffset,buf.byteLength);let e=buf.length-22;
+  while(e>=0&&dv.getUint32(e,true)!==0x06054b50)e--;
+  if(e<0)throw new Error('no parece un archivo zip/.FNMM');
+  const n=dv.getUint16(e+10,true);let p=dv.getUint32(e+16,true);
+  if(n===0xFFFF||p===0xFFFFFFFF)throw new Error('zip64 no soportado');
+  const td=new TextDecoder('utf-8'),list=[];
+  for(let i=0;i<n;i++){
+    if(dv.getUint32(p,true)!==0x02014b50)throw new Error('zip dañado');
+    const fl=dv.getUint16(p+8,true),m=dv.getUint16(p+10,true),nl=dv.getUint16(p+28,true),xl=dv.getUint16(p+30,true),cl=dv.getUint16(p+32,true),lo=dv.getUint32(p+42,true);
+    const ent={name:td.decode(buf.subarray(p+46,p+46+nl)),fl:fl&~8,m,time:dv.getUint16(p+12,true),date:dv.getUint16(p+14,true),crc:dv.getUint32(p+16,true),cs:dv.getUint32(p+20,true),us:dv.getUint32(p+24,true),ext:dv.getUint32(p+38,true),raw:null};
+    const ls=lo+30+dv.getUint16(lo+26,true)+dv.getUint16(lo+28,true);ent.raw=buf.subarray(ls,ls+ent.cs);
+    list.push(ent);p+=46+nl+xl+cl;
+  }
+  const get=nm=>list.find(x=>x.name===nm);
+  const data=ent=>{if(ent.m===0)return ent.raw;if(ent.m===8)return inflate(ent.raw,ent.us);throw new Error('compresión no soportada ('+ent.m+')');};
+  return {list,
+    text(nm){const x=get(nm);if(!x)throw new Error('falta '+nm+' en el nivel');return new TextDecoder('utf-8').decode(data(x)).replace(/^\uFEFF/,'');},
+    build(repl){
+      const te=new TextEncoder(),parts=[],cen=[];let off=0;
+      const w=(a,b)=>{};
+      for(const x of list){
+        let m=x.m,raw=x.raw,crc=x.crc,cs=x.cs,us=x.us;
+        if(repl[x.name]!==undefined){const d=te.encode(repl[x.name]);m=0;raw=d;crc=crc32(d);cs=us=d.length;}
+        const nm=te.encode(x.name),h=new DataView(new ArrayBuffer(30));
+        h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,x.fl,true);h.setUint16(8,m,true);h.setUint16(10,x.time,true);h.setUint16(12,x.date,true);h.setUint32(14,crc,true);h.setUint32(18,cs,true);h.setUint32(22,us,true);h.setUint16(26,nm.length,true);h.setUint16(28,0,true);
+        const c=new DataView(new ArrayBuffer(46));
+        c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint16(8,x.fl,true);c.setUint16(10,m,true);c.setUint16(12,x.time,true);c.setUint16(14,x.date,true);c.setUint32(16,crc,true);c.setUint32(20,cs,true);c.setUint32(24,us,true);c.setUint16(28,nm.length,true);c.setUint32(38,x.ext,true);c.setUint32(42,off,true);
+        parts.push(new Uint8Array(h.buffer),nm,raw);cen.push(new Uint8Array(c.buffer),nm);off+=30+nm.length+raw.length;
+      }
+      let cl=0;for(const a of cen)cl+=a.length;
+      const eo=new DataView(new ArrayBuffer(22));eo.setUint32(0,0x06054b50,true);eo.setUint16(8,list.length,true);eo.setUint16(10,list.length,true);eo.setUint32(12,cl,true);eo.setUint32(16,off,true);
+      return new Blob(parts.concat(cen,[new Uint8Array(eo.buffer)]),{type:'application/zip'});
+    }};
+}
+// </core>
+const $=id=>document.getElementById(id);
+const readBuf=f=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(new Uint8Array(r.result));r.onerror=()=>no(r.error||new Error('no se pudo leer el archivo'));r.readAsArrayBuffer(f);});
+const readTxt=f=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=()=>no(r.error||new Error('no se pudo leer el archivo'));r.readAsText(f);});
+let P=null,Z=null,SC='',EV='',zname='nivel';
+$('fp').onchange=async e=>{const fs=[...e.target.files];if(!fs.length)return;const f=fs[0];$('ip').textContent='Leyendo…';try{const js=[];for(const x of fs)js.push(JSON.parse((await readTxt(x)).replace(/^\uFEFF/,'')));const ss=js.map(j=>(j.song&&typeof j.song==='object')?j.song:j),m=ss.find(s=>(s.notes||[]).length)||ss[0];P={song:Object.assign({},m,{events:ss.flatMap(s=>s.events||[])})};const a=psychEvents(P),S=P.song;
+  const z=a.find(isGameZoom);if(z&&parseFloat(z.a)>0)$('zr').value=parseFloat(z.a);
+  $('ip').textContent=(S.song||f.name)+' · '+a.filter(x=>x.n==='Camera Movement'||x.n==='Carma Camera').length+' eventos de cámara · '+(S.notes||[]).length+' secciones';}
+  catch(x){P=null;$('ip').textContent='No se pudo leer el JSON: '+x.message;}chk();};
+$('ff').onchange=async e=>{const f=e.target.files[0];if(!f)return;$('if').textContent='Leyendo…';try{Z=readZip(await readBuf(f));zname=f.name.replace(/\.[^.]+$/,'');
+  SC=Z.text('scene.json');EV=Z.text('events.json');
+  const sc=JSON.parse(SC),cs=sc.cameras||[],opts=(cs.length?'<optgroup label="Cámaras actuales">'+cs.map((c,i)=>'<option value="c:'+i+'">Cámara '+i+' · ('+Math.round(c.position.x)+', '+Math.round(c.position.y)+')</option>').join('')+'</optgroup>':'')+'<optgroup label="Objetos">'+sc.objects.map((o,i)=>'<option value="o:'+i+'">'+i+' · '+o.spr+(o.strumLine>=0?' (línea '+o.strumLine+')':'')+'</option>').join('')+'</optgroup>';
+  $('o0').innerHTML=opts;$('o1').innerHTML=opts;
+  const i0=cs.length>0?'c:0':'o:'+sc.objects.findIndex(o=>o.strumLine===1),i1=cs.length>1?'c:1':'o:'+sc.objects.findIndex(o=>o.strumLine===0);
+  $('o0').value=i0;$('o1').value=i1;
+  $('if').textContent=sc.objects.length+' objetos · '+(sc.cameras||[]).length+' cámaras actuales';}
+  catch(x){Z=null;$('if').textContent='No se pudo leer el .FNMM: '+x.message;}chk();};
+function chk(){$('go').disabled=!(P&&Z);}
+let blob=null;
+$('go').onclick=async()=>{try{const sc=JSON.parse(SC),ev=JSON.parse(EV),n=id=>parseFloat($(id).value)||0;
+  const r=convert(P,sc,ev,{src:$('src').value,zoom:$('uz').checked,zref:n('zr')||1,tr:n('tr'),dl:n('dl'),delz:$('dz').checked,
+    o0:$('o0').value,o1:$('o1').value,ez:$('ez').value,how:$('how').value,rd:parseFloat($('rd').value),d0:[n('x0'),n('y0')],d1:[n('x1'),n('y1')]});
+  blob=Z.build({'scene.json':fmt(sc),'events.json':fmt(ev)});
+  $('out').innerHTML='<span class="ok">Listo.</span>\nCámaras antes: '+r.oldCams+' → ahora: '+r.cams+'\nEventos de movimiento creados: '+r.evs+' ('+r.short+' con transición acortada; '+r.merged+' sumados a eventos que ya existían)'+'\nAcciones antiguas eliminadas: '+r.rm+'\n\nCámaras creadas:\n'+r.list.join('\n')+(r.warn.length?'\n<span class="wr">'+r.warn.join('\n').replace(/</g,'&lt;')+'</span>':'');
+  $('res').hidden=false;$('dm').textContent='';}
+  catch(x){$('res').hidden=false;$('out').textContent='Error: '+x.message;}};
+$('dn').onclick=async()=>{if(!blob)return;const name=zname+'_camaras.zip';let d=null;
+  try{d=window.claude&&claude.use?await claude.use('downloads'):null;}catch(x){}
+  try{if(d){await d.save({filename:name,data:blob});$('dm').textContent='Guardado. Cambia la extensión .zip por .FNMM antes de abrirlo en Funky Maker.';}
+    else{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=zname+'_camaras.FNMM';a.click();}}
+  catch(x){$('dm').textContent=x.code==='declined'?'Descarga cancelada.':'No se pudo guardar: '+(x.message||x);}};
+</script>
+<script>
+(function(){
+  [['fp','fpn'],['ff','ffn']].forEach(([id,nid])=>{const i=$(id);i.addEventListener('change',()=>{const l=[...i.files].map(f=>f.name).join(', ');if(l){$(nid).textContent=l;i.closest('.dz').classList.add('on');}});});
+  document.querySelectorAll('.dz').forEach(z=>{
+    ['dragenter','dragover'].forEach(ev=>z.addEventListener(ev,e=>{e.preventDefault();z.classList.add('drag');}));
+    ['dragleave','drop'].forEach(ev=>z.addEventListener(ev,e=>{e.preventDefault();z.classList.remove('drag');}));
+    z.addEventListener('drop',e=>{const i=z.querySelector('input'),fs=e.dataTransfer&&e.dataTransfer.files;if(fs&&fs.length){try{i.files=fs;i.dispatchEvent(new Event('change'));}catch(x){}}});
+  });
+  [['ip','fp'],['if','ff']].forEach(([s,i])=>new MutationObserver(()=>{const z=$(i).closest('.dz'),bad=/^No se pudo/.test($(s).textContent);z.classList.toggle('bad',bad);if(bad)z.classList.remove('on');}).observe($(s),{childList:true,characterData:true,subtree:true}));
+  window.addEventListener('error',e=>{const b=$('err');b.hidden=false;b.textContent='Error: '+(e.message||e);});window.addEventListener('unhandledrejection',e=>{const b=$('err');b.hidden=false;b.textContent='Error: '+((e.reason&&e.reason.message)||e.reason);});
+  (function(){const hp=$('help'),openH=()=>{hp.hidden=false;document.body.style.overflow='hidden';$('hx').focus();},closeH=()=>{hp.hidden=true;document.body.style.overflow='';$('hbtn').focus();};
+    $('hbtn').onclick=openH;$('hx').onclick=closeH;$('hok').onclick=closeH;
+    hp.addEventListener('click',e=>{if(e.target===hp)closeH();});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!hp.hidden)closeH();});})();
+})();
+</script>
+</body></html>
